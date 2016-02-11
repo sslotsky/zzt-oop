@@ -1,0 +1,56 @@
+﻿%{
+open SyntaxTree
+%}
+
+%start start
+
+%token <string> STRING
+%token MY_NAME_IS
+%token MOVE
+%token NORTH SOUTH EAST WEST SEEK
+%token ON DO END
+%token ANNOUNCE
+%token SHOOT
+%token EOF
+
+%type < SyntaxTree.Command list > start
+
+%%
+
+start: script { $1 }
+
+script:
+	| commandList { $1 }
+
+commandList:
+	| command { [$1] }
+	| command commandList { $1::$2 }
+
+command:
+	| move { $1 }
+	| shoot { $1 }
+	| name { $1 }
+	| announce { $1 }
+	| on { $1 }
+
+move:
+	| MOVE direction { Move $2 }
+
+shoot:
+	| SHOOT direction { Shoot $2 }
+
+name:
+	| MY_NAME_IS STRING { Name $2 }
+
+announce:
+	| ANNOUNCE STRING { Announce $2 }
+
+on:
+	| ON STRING DO commandList END { On($2, $4) }
+
+direction:
+	| NORTH { North }
+	| SOUTH { South }
+	| EAST { East }
+	| WEST { West }
+	| SEEK { Seek }

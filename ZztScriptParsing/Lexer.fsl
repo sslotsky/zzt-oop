@@ -1,0 +1,36 @@
+﻿{
+module Lexer
+
+open Microsoft.FSharp.Text.Lexing
+open System
+open Parser
+
+let lexeme = LexBuffer.LexemeString
+
+let newline (lexbuf: LexBuffer<_>) = 
+  lexbuf.StartPos <- lexbuf.StartPos.NextLine
+}
+
+let quotedString = '\'' [^ '\'']* '\''
+let white = [' ' '\t']+
+let newline = '\r' | '\n' | "\r\n"
+
+rule read =
+	parse
+	| white    { read lexbuf }
+	| newline  { newline lexbuf; read lexbuf }
+	| "move" { MOVE }
+	| "shoot" { SHOOT }
+	| "myNameIs" { MY_NAME_IS }
+	| "announce" { ANNOUNCE }
+	| "on" { ON }
+	| "do" { DO }
+	| "end" { END }
+	| "North" { NORTH }
+	| "South" { SOUTH }
+	| "East" { EAST }
+	| "West" { WEST } 
+	| "Seek" { SEEK }
+	| quotedString { STRING (let s = lexeme lexbuf in s.Substring(1, s.Length - 2)) }
+	| eof { EOF }
+	| _ { raise (Exception (sprintf "SyntaxError: Unexpected char: '%s' Line: %d Column: %d" (lexeme lexbuf) (lexbuf.StartPos.Line+1) lexbuf.StartPos.Column)) }
