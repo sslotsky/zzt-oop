@@ -24,11 +24,11 @@ type GameObject() =
 
     member this.Execute(command:Command) =
         match command with
-            | Move(direction) -> this.Move(direction)
-            | Name(newName) -> this.Name(newName)
-            | Announce(message) -> this.Announce(message)
-            | On(eventName, commandList) -> this.Subscribe(eventName, commandList)
-            | Shoot(direction) -> this.Shoot(direction)
+        | Move(direction) -> this.Move(direction)
+        | Name(newName) -> this.Name(newName)
+        | Announce(message) -> this.Announce(message)
+        | On(eventName, commandList) -> this.Subscribe(eventName, commandList)
+        | Shoot(direction) -> this.Shoot(direction)
 
     member this.Subscribe(name, commandList) =
         events.[name] <- commandList

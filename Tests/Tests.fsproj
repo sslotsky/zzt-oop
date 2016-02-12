@@ -63,13 +63,19 @@
     <Compile Include="Library1.fs" />
     <None Include="Script.fsx" />
     <None Include="packages.config" />
-    <Compile Include="FunTest.fs" />
+    <Compile Include="ParserTest.fs" />
     <None Include="app.config" />
+    <Compile Include="GameObjectTest.fs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ZztScriptParsing\ZztScriptParsing.fsproj">
       <Name>ZztScriptParsing</Name>
       <Project>{2cb04e55-b535-4cd0-82e6-e21751150a3c}</Project>
+      <Private>True</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Zzt\Zzt.fsproj">
+      <Name>Zzt</Name>
+      <Project>{d32de4a0-8914-4b4a-a1bc-a133120c3ea1}</Project>
       <Private>True</Private>
     </ProjectReference>
   </ItemGroup>

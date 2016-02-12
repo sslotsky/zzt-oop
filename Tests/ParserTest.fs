@@ -1,4 +1,4 @@
-﻿module FunTest
+﻿module ParserTest
 
 open NUnit.Framework
 open FsUnit
@@ -6,7 +6,7 @@ open Microsoft.FSharp.Text.Lexing
 open SyntaxTree
 
 [<TestFixture>]
-type FunTest() =
+type ParserTest() =
     member this.parse script =
         let lexbuf = LexBuffer<char>.FromString script
         let res = Parser.start Lexer.read lexbuf
