@@ -68,6 +68,11 @@ type nonTerminalId =
     | NONTERM_script
     | NONTERM_commandList
     | NONTERM_command
+    | NONTERM_set
+    | NONTERM_clear
+    | NONTERM_conditional
+    | NONTERM_flag
+    | NONTERM_userDefined
     | NONTERM_move
     | NONTERM_go
     | NONTERM_walk

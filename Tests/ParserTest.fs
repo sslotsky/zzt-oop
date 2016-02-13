@@ -39,6 +39,17 @@ type ParserTest() =
             go CCW Flow
             walk RNDP Seek
             walk OPP Flow
+
+            set Aligned
+            set Annoyed
+            clear Annoyed
+            if Annoyed do
+                walk OPP Seek
+            end
+
+            if Blocked North do
+                walk East
+            end
         """
         let commandList = reader.Read(script)
-        commandList.Length |> should equal 10
+        commandList.Length |> should equal 15

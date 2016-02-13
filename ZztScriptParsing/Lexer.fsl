@@ -42,6 +42,13 @@ rule read =
 	| "CCW" { CCW }
 	| "RNDP" { RNDP }
 	| "OPP" { OPP }
+	| "set" { SET }
+	| "clear" { CLEAR }
+	| "if" { IF }
+	| "Aligned" { ALIGNED }
+	| "Touching" { TOUCHING }
+	| "Blocked" { BLOCKED }
+	| "Energized" { ENERGIZED }
 	| quotedString { STRING (let s = lexeme lexbuf in s.Substring(1, s.Length - 2)) }
 	| identifier { ID(lexeme lexbuf) }
 	| eof { EOF }

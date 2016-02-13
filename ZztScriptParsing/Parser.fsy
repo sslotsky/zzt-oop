@@ -37,6 +37,28 @@ command:
 	| name { $1 }
 	| announce { $1 }
 	| on { $1 }
+	| set { $1 }
+	| clear { $1 }
+	| conditional { $1 }
+
+set:
+	| SET flag { Set $2 }
+
+clear:
+	| CLEAR flag { Clear $2 }
+
+conditional:
+	| IF flag DO commandList END { If($2, $4) }
+
+flag:
+	| ALIGNED { Aligned }
+	| TOUCHING { Touching }
+	| BLOCKED direction { Blocked $2 }
+	| ENERGIZED { Energized }
+	| userDefined { UserDefined $1 }
+
+userDefined:
+	| ID { FlagName $1 }
 
 move:
 	| MOVE direction { Move $2 }
