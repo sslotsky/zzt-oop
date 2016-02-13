@@ -12,8 +12,23 @@ type token =
   | EAST
   | WEST
   | SEEK
+  | FLOW
+  | CW
+  | CCW
+  | RNDP
+  | OPP
+  | ALIGNED
+  | TOUCHING
+  | BLOCKED
+  | ENERGIZED
+  | IF
+  | SET
+  | CLEAR
   | MOVE
+  | GO
+  | WALK
   | MY_NAME_IS
+  | ID of (string)
   | STRING of (string)
 type tokenId = 
     | TOKEN_EOF
@@ -27,8 +42,23 @@ type tokenId =
     | TOKEN_EAST
     | TOKEN_WEST
     | TOKEN_SEEK
+    | TOKEN_FLOW
+    | TOKEN_CW
+    | TOKEN_CCW
+    | TOKEN_RNDP
+    | TOKEN_OPP
+    | TOKEN_ALIGNED
+    | TOKEN_TOUCHING
+    | TOKEN_BLOCKED
+    | TOKEN_ENERGIZED
+    | TOKEN_IF
+    | TOKEN_SET
+    | TOKEN_CLEAR
     | TOKEN_MOVE
+    | TOKEN_GO
+    | TOKEN_WALK
     | TOKEN_MY_NAME_IS
+    | TOKEN_ID
     | TOKEN_STRING
     | TOKEN_end_of_input
     | TOKEN_error
@@ -39,6 +69,8 @@ type nonTerminalId =
     | NONTERM_commandList
     | NONTERM_command
     | NONTERM_move
+    | NONTERM_go
+    | NONTERM_walk
     | NONTERM_shoot
     | NONTERM_name
     | NONTERM_announce

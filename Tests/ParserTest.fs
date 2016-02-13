@@ -32,6 +32,13 @@ type ParserTest() =
                 announce 'I hate you'
                 shoot Seek
             end
+
+            move Seek
+            walk Flow
+            shoot CW North
+            go CCW Flow
+            walk RNDP Seek
+            walk OPP Flow
         """
         let commandList = reader.Read(script)
-        commandList.Length |> should equal 4
+        commandList.Length |> should equal 10

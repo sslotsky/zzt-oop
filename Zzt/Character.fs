@@ -38,3 +38,4 @@ type Character(scene:IScene) =
         | East -> incr x; this
         | West -> decr x; this
         | Seek -> this.Move(scene.Seek())
+        | _ -> this // fill in remaining directions
