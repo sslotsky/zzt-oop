@@ -15,22 +15,6 @@ type Character(scene:IScene) =
     member this.X() = x
     member this.Y() = y
 
-    member this.Perform(commands:Command list) =
-        this.ExecuteCommands(List.rev commands)
-
-    member private this.ExecuteCommands(commands:Command list) =
-        match commands with
-        | [] -> this
-        | h::t -> this.ExecuteCommands(t).Execute(h)
-
-    member this.Execute(command:Command) =
-        match command with
-        | Move(direction) -> this.Move(direction)
-        | Name(newName) -> this.Name(newName)
-        | Announce(message) -> this.Announce(message)
-        | On(eventName, commandList) -> this.Subscribe(eventName, commandList)
-        | Shoot(direction) -> this.Shoot(direction)
-
     member this.Subscribe(name, commandList) =
         events.[name] <- commandList
         this

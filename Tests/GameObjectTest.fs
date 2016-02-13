@@ -15,7 +15,8 @@ type CharacterTest() =
     member this.MoveTest() =
         let command = Move(North)
         let npc = new Character(scene.Object)
-        ignore(npc.Execute(command))
+        let driver = new Driver(npc)
+        ignore(driver.Execute(command))
         npc.Y().Value |> should equal 1
 
     [<Test>]
@@ -23,6 +24,7 @@ type CharacterTest() =
         let name = "Johnny"
         let command = Name(name)
         let npc = new Character(scene.Object)
-        ignore(npc.Execute(command))
+        let driver = new Driver(npc)
+        ignore(driver.Execute(command))
         npc.Name() |> should equal name
         
