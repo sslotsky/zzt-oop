@@ -42,7 +42,10 @@
     <Reference Include="System.Numerics" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IScene.fs" />
+    <Compile Include="Character.fs" />
     <Compile Include="GameObject.fs" />
+    <Compile Include="Scene.fs" />
     <None Include="Script.fsx" />
   </ItemGroup>
   <ItemGroup>

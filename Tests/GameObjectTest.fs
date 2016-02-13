@@ -1,16 +1,20 @@
 ﻿module GameObjectTest
 
-open NUnit.Framework
 open FsUnit
+open NUnit.Framework
+open Moq
+
 open SyntaxTree
 open Zzt
 
 [<TestFixture>]
-type GameObjectTest() =
+type CharacterTest() =
+    let scene = new Mock<IScene>()
+
     [<Test>]
     member this.MoveTest() =
         let command = Move(North)
-        let npc = new GameObject()
+        let npc = new Character(scene.Object)
         ignore(npc.Execute(command))
         npc.Y().Value |> should equal 1
 
@@ -18,7 +22,7 @@ type GameObjectTest() =
     member this.NameTest() =
         let name = "Johnny"
         let command = Name(name)
-        let npc = new GameObject()
+        let npc = new Character(scene.Object)
         ignore(npc.Execute(command))
         npc.Name() |> should equal name
         
