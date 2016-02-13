@@ -1,12 +1,17 @@
 ﻿namespace Zzt
 
 open SyntaxTree
+open ZztScriptParsing
 
 type Driver(character:Character) =
     let character = character
 
     member private this.Exec character =
         this
+
+    member this.PerformScript(script) =
+        let reader = new ScriptReader()
+        this.Perform (reader.Read(script))
 
     member this.Perform(commands:Command list) =
         this.ExecuteCommands(List.rev commands)

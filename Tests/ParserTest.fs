@@ -4,24 +4,22 @@ open NUnit.Framework
 open FsUnit
 open Microsoft.FSharp.Text.Lexing
 open SyntaxTree
+open ZztScriptParsing
 
 [<TestFixture>]
 type ParserTest() =
-    member this.parse script =
-        let lexbuf = LexBuffer<char>.FromString script
-        let res = Parser.start Lexer.read lexbuf
-        res
+    let reader = new ScriptReader()
 
     [<Test>]
     member this.MoveTest() =
         let simpleScript = "move North move South"
-        let commandList = this.parse(simpleScript)
+        let commandList = reader.Read(simpleScript)
         commandList.Length |> should equal 2
 
     [<Test>]
     member this.NameTest() =
         let script = "myNameIs 'Johnny Rotten Fucking Tomatoes'"
-        let commandList = this.parse(script)
+        let commandList = reader.Read(script)
         commandList.Length |> should equal 1
 
     [<Test>]
@@ -35,5 +33,5 @@ type ParserTest() =
                 shoot Seek
             end
         """
-        let commandList = this.parse(script)
+        let commandList = reader.Read(script)
         commandList.Length |> should equal 4

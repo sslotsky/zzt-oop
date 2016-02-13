@@ -32,6 +32,7 @@ type Character(scene:IScene) =
 
     member this.Move(direction:Direction) =
         match direction with
+        // TODO: This should check with the scene first
         | North -> incr y; this
         | South -> decr y; this
         | East -> incr x; this
