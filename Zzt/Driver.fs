@@ -13,6 +13,7 @@ type Driver(character:Character) =
         | Announce(message) ->  character.Announce(message)
         | On(eventName, commandList) ->  character.Subscribe(eventName, commandList)
         | Shoot(direction) ->  character.Shoot(direction)
+        | _ -> character // fill in remaining commands
 
     member private this.Exec character command =
         ignore(updateCharacter(command))

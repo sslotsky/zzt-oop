@@ -12,6 +12,9 @@ let newline (lexbuf: LexBuffer<_>) =
 }
 
 let quotedString = '\'' [^ '\'']* '\''
+let char = ['a'-'z' 'A'-'Z']
+let digit = ['0'-'9']
+let identifier  = char(char|digit|['-' '_' '.'])*   
 let white = [' ' '\t']+
 let newline = '\r' | '\n' | "\r\n"
 
@@ -19,7 +22,10 @@ rule read =
 	parse
 	| white    { read lexbuf }
 	| newline  { newline lexbuf; read lexbuf }
+	| "Energized" { ENERGIZED }
 	| "move" { MOVE }
+	| "go" { GO }
+	| "walk" { WALK }
 	| "shoot" { SHOOT }
 	| "myNameIs" { MY_NAME_IS }
 	| "announce" { ANNOUNCE }
@@ -31,6 +37,19 @@ rule read =
 	| "East" { EAST }
 	| "West" { WEST } 
 	| "Seek" { SEEK }
+	| "Flow" { FLOW }
+	| "CW" { CW }
+	| "CCW" { CCW }
+	| "RNDP" { RNDP }
+	| "OPP" { OPP }
+	| "set" { SET }
+	| "clear" { CLEAR }
+	| "if" { IF }
+	| "Aligned" { ALIGNED }
+	| "Touching" { TOUCHING }
+	| "Blocked" { BLOCKED }
+	| "Energized" { ENERGIZED }
 	| quotedString { STRING (let s = lexeme lexbuf in s.Substring(1, s.Length - 2)) }
+	| identifier { ID(lexeme lexbuf) }
 	| eof { EOF }
 	| _ { raise (Exception (sprintf "SyntaxError: Unexpected char: '%s' Line: %d Column: %d" (lexeme lexbuf) (lexbuf.StartPos.Line+1) lexbuf.StartPos.Column)) }
