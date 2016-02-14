@@ -43,13 +43,23 @@ type ParserTest() =
             set Aligned
             set Annoyed
             clear Annoyed
-            if Annoyed do
+            if Annoyed then
                 walk OPP Seek
             end
 
-            if Blocked North do
+            if Blocked North then
                 walk East
+            else
+                walk North
             end
+
+            unless Blocked West do
+                walk West
+            end
+
+            walk North if Blocked South
+
+            shoot CW Seek unless Aligned
         """
         let commandList = reader.Read(script)
-        commandList.Length |> should equal 15
+        commandList.Length |> should equal 18
