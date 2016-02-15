@@ -22,6 +22,9 @@ type token =
   | BLOCKED
   | ENERGIZED
   | IF
+  | THEN
+  | ELSE
+  | UNLESS
   | SET
   | CLEAR
   | MOVE
@@ -52,6 +55,9 @@ type tokenId =
     | TOKEN_BLOCKED
     | TOKEN_ENERGIZED
     | TOKEN_IF
+    | TOKEN_THEN
+    | TOKEN_ELSE
+    | TOKEN_UNLESS
     | TOKEN_SET
     | TOKEN_CLEAR
     | TOKEN_MOVE

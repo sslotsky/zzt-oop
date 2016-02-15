@@ -22,7 +22,6 @@ rule read =
 	parse
 	| white    { read lexbuf }
 	| newline  { newline lexbuf; read lexbuf }
-	| "Energized" { ENERGIZED }
 	| "move" { MOVE }
 	| "go" { GO }
 	| "walk" { WALK }
@@ -45,6 +44,9 @@ rule read =
 	| "set" { SET }
 	| "clear" { CLEAR }
 	| "if" { IF }
+	| "then" { THEN }
+	| "else" { ELSE }
+	| "unless" { UNLESS }
 	| "Aligned" { ALIGNED }
 	| "Touching" { TOUCHING }
 	| "Blocked" { BLOCKED }

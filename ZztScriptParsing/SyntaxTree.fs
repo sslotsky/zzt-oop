@@ -23,6 +23,8 @@ type Command =
     | Set of Flag
     | Clear of Flag
     | If of Flag * Command list
+    | IfElse of Flag * Command list * Command list
+    | Unless of Flag * Command list
     | On of string * Command list
 
 

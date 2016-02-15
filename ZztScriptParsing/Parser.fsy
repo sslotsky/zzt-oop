@@ -8,7 +8,7 @@ open SyntaxTree
 %token <string> ID
 %token MY_NAME_IS
 %token MOVE GO WALK
-%token IF SET CLEAR
+%token IF THEN ELSE UNLESS SET CLEAR
 %token ALIGNED TOUCHING BLOCKED ENERGIZED
 %token NORTH SOUTH EAST WEST SEEK FLOW CW CCW RNDP OPP
 %token ON DO END
@@ -48,7 +48,11 @@ clear:
 	| CLEAR flag { Clear $2 }
 
 conditional:
-	| IF flag DO commandList END { If($2, $4) }
+	| IF flag THEN commandList END { If($2, $4) }
+	| command IF flag { If($3, [$1]) }
+	| IF flag THEN commandList ELSE commandList END { IfElse($2, $4, $6) }
+	| UNLESS flag DO commandList END { Unless($2, $4) }
+	| command UNLESS flag { Unless($3, [$1]) }
 
 flag:
 	| ALIGNED { Aligned }
