@@ -1,5 +1,6 @@
 ﻿%{
 open SyntaxTree
+open MusicSyntax
 %}
 
 %start start
@@ -7,7 +8,7 @@ open SyntaxTree
 %token <string> STRING
 %token <string> ID
 %token MY_NAME_IS
-%token MOVE GO WALK
+%token MOVE GO WALK PLAY_MUSIC
 %token IF THEN ELSE UNLESS SET CLEAR
 %token ALIGNED TOUCHING BLOCKED ENERGIZED
 %token NORTH SOUTH EAST WEST SEEK FLOW CW CCW RNDP OPP
@@ -15,6 +16,13 @@ open SyntaxTree
 %token ANNOUNCE
 %token SHOOT
 %token EOF
+
+%token <int> BPM
+%token A_PITCH B_PITCH C_PITCH D_PITCH E_PITCH F_PITCH G_PITCH
+%token SHARP FLAT NATURAL OCTAVE_UP OCTAVE_DOWN
+%token REST WHOLE HALF QUARTER EIGHTH SIXTEENTH THIRTY_SECOND TIME_AND_A_HALF ONE_THIRD
+%token MAJOR HMINOR MMINORASC MMINORDESC
+%token SAX GUITAR KEYS
 
 %type < SyntaxTree.Command list > start
 
@@ -40,6 +48,7 @@ command:
 	| set { $1 }
 	| clear { $1 }
 	| conditional { $1 }
+	| playMusic { $1 }
 
 set:
 	| SET flag { Set $2 }
@@ -96,3 +105,84 @@ direction:
 	| CCW direction { CounterClockwise $2 }
 	| RNDP direction { RandomPerpendicular $2 }
 	| OPP direction { Opposite $2 }
+
+playMusic:
+	| PLAY_MUSIC song { Play $2 }
+
+song:
+	| phrase { Composition(BeatsPerMinute(100), Major(NaturalKey(C)), [Instrumental(Piano, $1)]) }
+	| key phrase { Composition(BeatsPerMinute(100), $1, [Instrumental(Piano, $2)]) } 
+	| tempo phrase { Composition($1, Major(NaturalKey(C)), [Instrumental(Piano, $2)]) }
+	| tempo key phrase { Composition($1, $2, [Instrumental(Piano, $3)]) }
+	| voiceList { Composition(BeatsPerMinute(100), Major(NaturalKey(C)), $1) }	
+	| tempo voiceList { Composition($1, Major(NaturalKey(C)), $2)}
+	| key voiceList { Composition(BeatsPerMinute(100), $1, $2) }                 
+	| tempo key voiceList { Composition($1, $2, $3) }							   
+
+phrase:
+	| noteGroups { NoteGroups $1 }
+
+noteGroups:
+	| noteGroup { [$1] }
+	| noteGroup noteGroups { $1::$2 }
+
+noteGroup:
+	| duration musicNoteList { $1, $2 }
+
+duration:
+	| WHOLE { Whole }
+	| HALF { Half }
+	| QUARTER { Quarter }
+	| EIGHTH { Eighth }
+	| SIXTEENTH { Sixteenth }
+	| THIRTY_SECOND { ThirtySecond }
+	| duration TIME_AND_A_HALF  { TimeAndAHalf $1 }
+	| duration ONE_THIRD { OneThird $1 }
+
+musicNoteList:
+	| musicNote { [$1] }
+	| musicNote musicNoteList { $1::$2 }
+
+musicNote:
+	| noteName SHARP { Sharp $1 }
+	| noteName FLAT { Flat $1 }
+	| noteName NATURAL { Natural $1 }
+	| musicNote OCTAVE_UP { RaiseOctave $1 }
+	| musicNote OCTAVE_DOWN { LowerOctave $1 }
+	| noteName { Default $1 }
+	| REST { Rest }
+
+noteName:
+	| A_PITCH { A }
+	| B_PITCH { B }
+	| C_PITCH { C }
+	| D_PITCH { D }
+	| E_PITCH { E }
+	| F_PITCH { F }
+	| G_PITCH { G }
+
+key:
+	| keyName MAJOR { Major $1 }
+	| keyName HMINOR { HarmonicMinor $1 }
+	| keyName MMINORASC { MelodicMinorAscending $1 }
+	| keyName MMINORDESC { MelodicMinorDescending $1 }
+
+keyName:
+	| noteName SHARP { SharpKey $1 }
+	| noteName FLAT { FlatKey $1 }
+	| noteName { NaturalKey $1 }
+
+tempo:
+	| BPM { BeatsPerMinute $1 }
+
+voiceList:
+	| voice { [$1] }
+	| voice voiceList { $1::$2 }
+
+voice:
+	| instrument phrase { Instrumental($1, $2) }
+
+instrument:
+	| SAX { Saxophone }
+	| GUITAR { Guitar }
+	| KEYS { Piano }
