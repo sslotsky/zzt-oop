@@ -57,6 +57,7 @@
     <Error Condition="!Exists('..\packages\FsLexYacc.6.1.0\build\FsLexYacc.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\FsLexYacc.6.1.0\build\FsLexYacc.targets'))" />
   </Target>
   <ItemGroup>
+    <Compile Include="MusicSyntax.fs" />
     <Compile Include="SyntaxTree.fs" />
     <FsYacc Include="Parser.fsy">
       <OtherFlags>--module Parser</OtherFlags>

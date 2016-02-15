@@ -70,6 +70,7 @@
     <Compile Include="ParserTest.fs" />
     <None Include="app.config" />
     <Compile Include="GameObjectTest.fs" />
+    <Compile Include="MusicTest.fs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ZztScriptParsing\ZztScriptParsing.fsproj">
