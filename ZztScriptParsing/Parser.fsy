@@ -111,10 +111,10 @@ playMusic:
 	| PLAY_MUSIC LBRACE song RBRACE { Play $3 }
 
 song:
-	| phrase { Composition(BeatsPerMinute(100), Major(NaturalKey(C)), [Instrumental(Piano, $1)]) }
-	| key phrase { Composition(BeatsPerMinute(100), $1, [Instrumental(Piano, $2)]) } 
-	| tempo phrase { Composition($1, Major(NaturalKey(C)), [Instrumental(Piano, $2)]) }
-	| tempo key phrase { Composition($1, $2, [Instrumental(Piano, $3)]) }
+	| phrase { Composition(BeatsPerMinute(100), Major(NaturalKey(C)), [Vocal $1]) }
+	| key phrase { Composition(BeatsPerMinute(100), $1, [Vocal $2]) } 
+	| tempo phrase { Composition($1, Major(NaturalKey(C)), [Vocal $2]) }
+	| tempo key phrase { Composition($1, $2, [Vocal $3]) }
 	| voiceList { Composition(BeatsPerMinute(100), Major(NaturalKey(C)), $1) }	
 	| tempo voiceList { Composition($1, Major(NaturalKey(C)), $2)}
 	| key voiceList { Composition(BeatsPerMinute(100), $1, $2) }                 
@@ -183,6 +183,7 @@ voiceList:
 
 voice:
 	| LBRACKET instrument phrase RBRACKET { Instrumental($2, $3) }
+	| LBRACKET phrase RBRACKET { Vocal $2 }
 
 instrument:
 	| SAX { Saxophone }
