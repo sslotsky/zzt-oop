@@ -17,6 +17,7 @@ open MusicSyntax
 %token SHOOT
 %token EOF
 
+%token LBRACE RBRACE LBRACKET RBRACKET
 %token <int> BPM
 %token A_PITCH B_PITCH C_PITCH D_PITCH E_PITCH F_PITCH G_PITCH
 %token SHARP FLAT NATURAL OCTAVE_UP OCTAVE_DOWN
@@ -107,7 +108,7 @@ direction:
 	| OPP direction { Opposite $2 }
 
 playMusic:
-	| PLAY_MUSIC song { Play $2 }
+	| PLAY_MUSIC LBRACE song RBRACE { Play $3 }
 
 song:
 	| phrase { Composition(BeatsPerMinute(100), Major(NaturalKey(C)), [Instrumental(Piano, $1)]) }
@@ -117,7 +118,7 @@ song:
 	| voiceList { Composition(BeatsPerMinute(100), Major(NaturalKey(C)), $1) }	
 	| tempo voiceList { Composition($1, Major(NaturalKey(C)), $2)}
 	| key voiceList { Composition(BeatsPerMinute(100), $1, $2) }                 
-	| tempo key voiceList { Composition($1, $2, $3) }							   
+	| tempo key voiceList { Composition($1, $2, $3) }						   
 
 phrase:
 	| noteGroups { NoteGroups $1 }
@@ -162,6 +163,7 @@ noteName:
 	| G_PITCH { G }
 
 key:
+	| keyName { Major $1 }
 	| keyName MAJOR { Major $1 }
 	| keyName HMINOR { HarmonicMinor $1 }
 	| keyName MMINORASC { MelodicMinorAscending $1 }
@@ -180,7 +182,7 @@ voiceList:
 	| voice voiceList { $1::$2 }
 
 voice:
-	| instrument phrase { Instrumental($1, $2) }
+	| LBRACKET instrument phrase RBRACKET { Instrumental($2, $3) }
 
 instrument:
 	| SAX { Saxophone }

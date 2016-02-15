@@ -30,6 +30,10 @@ type token =
   | F_PITCH
   | G_PITCH
   | BPM of (int)
+  | LBRACE
+  | RBRACE
+  | LBRACKET
+  | RBRACKET
   | EOF
   | SHOOT
   | ANNOUNCE
@@ -93,6 +97,10 @@ type tokenId =
     | TOKEN_F_PITCH
     | TOKEN_G_PITCH
     | TOKEN_BPM
+    | TOKEN_LBRACE
+    | TOKEN_RBRACE
+    | TOKEN_LBRACKET
+    | TOKEN_RBRACKET
     | TOKEN_EOF
     | TOKEN_SHOOT
     | TOKEN_ANNOUNCE

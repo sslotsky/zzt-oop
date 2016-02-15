@@ -9,12 +9,14 @@ let lexeme = LexBuffer.LexemeString
 
 let newline (lexbuf: LexBuffer<_>) = 
   lexbuf.StartPos <- lexbuf.StartPos.NextLine
+  lexbuf.EndPos <- lexbuf.EndPos.NextLine
 }
 
 let quotedString = '\'' [^ '\'']* '\''
 let char = ['a'-'z' 'A'-'Z']
 let digit = ['0'-'9']
 let identifier  = char(char|digit|['-' '_' '.'])*   
+let flag = '~' identifier
 let white = [' ' '\t']+
 let newline = '\r' | '\n' | "\r\n"
 
@@ -50,49 +52,34 @@ rule read =
 	| "then" { THEN }
 	| "else" { ELSE }
 	| "unless" { UNLESS }
+	| flag { ID(let s = lexeme lexbuf in s.Substring(1, s.Length - 1)) }
 	| "Aligned" { ALIGNED }
 	| "Touching" { TOUCHING }
 	| "Blocked" { BLOCKED }
 	| "Energized" { ENERGIZED }
 	| "playMusic" { PLAY_MUSIC }
-	| "{" { read_music lexbuf.StartPos "" lexbuf }
-	| quotedString { STRING (let s = lexeme lexbuf in s.Substring(1, s.Length - 2)) }
-	| identifier { ID(lexeme lexbuf) }
-	| eof { EOF }
-	| _ { raise (Exception (sprintf "SyntaxError: Unexpected char: '%s' Line: %d Column: %d" (lexeme lexbuf) (lexbuf.StartPos.Line+1) lexbuf.StartPos.Column)) }
-
-and read_music position str =
-	parse
-	| white    { read_music position str lexbuf }
-	| newline  { newline lexbuf; read_music position str lexbuf }
-	| '}' { read lexbuf }
-	| '[' { read_part lexbuf.StartPos "" true lexbuf }
-	| eof     { failwithf "end of file in string started at or near %A" position }
-	| _ { read_part lexbuf.StartPos "" false lexbuf }
-
-
-and read_part position str expectEndQuote =
-	parse
-	| white    { read_part position str expectEndQuote lexbuf }
-	| newline  { newline lexbuf; read_part position str expectEndQuote lexbuf }
-	| ']' {  if expectEndQuote then (read_music lexbuf.StartPos "" lexbuf) else failwithf "unexpected closing bracket" }
+	| "{" { LBRACE }
+	| "}" { RBRACE }
+	| "[" { LBRACKET }
+	| "]" { RBRACKET }
 	| tempo { BPM (int (lexeme lexbuf)) }
-	| 'A' { A_PITCH }
-	| 'B' { B_PITCH }
-	| 'C' { C_PITCH }
-	| 'D' { D_PITCH }
-	| 'E' { E_PITCH }
-	| 'F' { F_PITCH }
-	| 'G' { G_PITCH }
-	| '#' { SHARP }
-	| '!' { FLAT }
-	| '@' { NATURAL }
-	| '+' { OCTAVE_UP }
-	| '-' { OCTAVE_DOWN }
-	| 'M' { MAJOR }
+	| "A" { A_PITCH }
+	| "B" { B_PITCH }
+	| "C" { C_PITCH }
+	| "D" { D_PITCH }
+	| "E" { E_PITCH }
+	| "F" { F_PITCH }
+	| "G" { G_PITCH }
+	| "#" { SHARP }
+	| "!" { FLAT }
+	| "M" { MAJOR }
 	| "HM" { HMINOR }
 	| "MMASC" { MMINORASC }
 	| "MMDESC" { MMINORDESC }
+	| '@' { NATURAL }
+	| '+' { OCTAVE_UP }
+	| '-' { OCTAVE_DOWN }
+	| rest { REST }
 	| "W" { WHOLE }
 	| "H" { HALF }
 	| "Q" { QUARTER }
@@ -104,8 +91,6 @@ and read_part position str expectEndQuote =
 	| "Sax" { SAX }
 	| "Guitar" { GUITAR }
 	| "Keys" { KEYS }
-	| eof     { failwithf "end of file in string started at or near %A" position }	
-	| _     { if expectEndQuote then (failwithf "Unterminated musical expression near %A" position) else read lexbuf }	
-
-
-	
+	| quotedString { STRING (let s = lexeme lexbuf in s.Substring(1, s.Length - 2)) }
+	| eof { EOF }
+	| _ { raise (Exception (sprintf "SyntaxError: Unexpected char: '%s' Line: %d Column: %d" (lexeme lexbuf) (lexbuf.StartPos.Line+1) lexbuf.StartPos.Column)) }	
