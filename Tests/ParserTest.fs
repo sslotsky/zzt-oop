@@ -41,9 +41,9 @@ type ParserTest() =
             walk OPP Flow
 
             set Aligned
-            set Annoyed
-            clear Annoyed
-            if Annoyed then
+            set ~Annoyed
+            clear ~Annoyed
+            if ~Annoyed then
                 walk OPP Seek
             end
 

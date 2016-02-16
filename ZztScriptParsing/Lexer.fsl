@@ -9,14 +9,19 @@ let lexeme = LexBuffer.LexemeString
 
 let newline (lexbuf: LexBuffer<_>) = 
   lexbuf.StartPos <- lexbuf.StartPos.NextLine
+  lexbuf.EndPos <- lexbuf.EndPos.NextLine
 }
 
 let quotedString = '\'' [^ '\'']* '\''
 let char = ['a'-'z' 'A'-'Z']
 let digit = ['0'-'9']
 let identifier  = char(char|digit|['-' '_' '.'])*   
+let flag = '~' identifier
 let white = [' ' '\t']+
 let newline = '\r' | '\n' | "\r\n"
+
+let rest = 'X'
+let tempo = digit+
 
 rule read =
 	parse
@@ -47,11 +52,45 @@ rule read =
 	| "then" { THEN }
 	| "else" { ELSE }
 	| "unless" { UNLESS }
+	| flag { ID(let s = lexeme lexbuf in s.Substring(1, s.Length - 1)) }
 	| "Aligned" { ALIGNED }
 	| "Touching" { TOUCHING }
 	| "Blocked" { BLOCKED }
 	| "Energized" { ENERGIZED }
+	| "playMusic" { PLAY_MUSIC }
+	| "{" { LBRACE }
+	| "}" { RBRACE }
+	| "[" { LBRACKET }
+	| "]" { RBRACKET }
+	| tempo { BPM (int (lexeme lexbuf)) }
+	| "A" { A_PITCH }
+	| "B" { B_PITCH }
+	| "C" { C_PITCH }
+	| "D" { D_PITCH }
+	| "E" { E_PITCH }
+	| "F" { F_PITCH }
+	| "G" { G_PITCH }
+	| "#" { SHARP }
+	| "!" { FLAT }
+	| "M" { MAJOR }
+	| "HM" { HMINOR }
+	| "MMASC" { MMINORASC }
+	| "MMDESC" { MMINORDESC }
+	| '@' { NATURAL }
+	| '+' { OCTAVE_UP }
+	| '-' { OCTAVE_DOWN }
+	| rest { REST }
+	| "W" { WHOLE }
+	| "H" { HALF }
+	| "Q" { QUARTER }
+	| "I" { EIGHTH }
+	| "S" { SIXTEENTH }
+	| "T" { THIRTY_SECOND }
+	| "." { TIME_AND_A_HALF }
+	| "3" { ONE_THIRD }
+	| "Sax" { SAX }
+	| "Guitar" { GUITAR }
+	| "Keys" { KEYS }
 	| quotedString { STRING (let s = lexeme lexbuf in s.Substring(1, s.Length - 2)) }
-	| identifier { ID(lexeme lexbuf) }
 	| eof { EOF }
-	| _ { raise (Exception (sprintf "SyntaxError: Unexpected char: '%s' Line: %d Column: %d" (lexeme lexbuf) (lexbuf.StartPos.Line+1) lexbuf.StartPos.Column)) }
+	| _ { raise (Exception (sprintf "SyntaxError: Unexpected char: '%s' Line: %d Column: %d" (lexeme lexbuf) (lexbuf.StartPos.Line+1) lexbuf.StartPos.Column)) }	

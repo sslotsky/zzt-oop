@@ -1,5 +1,7 @@
 ﻿module SyntaxTree
 
+open MusicSyntax
+
 type Direction = 
     | North | South | East | West | Seek | Flow 
     | Clockwise of Direction | CounterClockwise of Direction | RandomPerpendicular of Direction | Opposite of Direction
@@ -26,6 +28,7 @@ type Command =
     | IfElse of Flag * Command list * Command list
     | Unless of Flag * Command list
     | On of string * Command list
+    | Play of Song
 
 
 (*
