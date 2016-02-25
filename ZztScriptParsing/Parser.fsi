@@ -46,6 +46,7 @@ type token =
   | WEST
   | SEEK
   | FLOW
+  | IDLE
   | CW
   | CCW
   | RNDP
@@ -113,6 +114,7 @@ type tokenId =
     | TOKEN_WEST
     | TOKEN_SEEK
     | TOKEN_FLOW
+    | TOKEN_IDLE
     | TOKEN_CW
     | TOKEN_CCW
     | TOKEN_RNDP

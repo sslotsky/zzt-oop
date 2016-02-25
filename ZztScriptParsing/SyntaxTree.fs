@@ -3,8 +3,58 @@
 open MusicSyntax
 
 type Direction = 
-    | North | South | East | West | Seek | Flow 
+    | North | South | East | West
+    | Seek | Flow | Idle
     | Clockwise of Direction | CounterClockwise of Direction | RandomPerpendicular of Direction | Opposite of Direction
+
+    member this.RNDP
+        with get() =
+            match this.Resolve with
+            | North
+            | South -> [East; West].[System.Random().Next (0,1)]
+            | East
+            | West -> [North; South].[System.Random().Next (0,1)]
+            | Idle -> Idle
+            | direction -> RandomPerpendicular direction
+
+    member this.Left
+        with get() =
+            match this.Resolve with
+            | North -> West
+            | West -> South
+            | South -> East
+            | East -> North
+            | Idle -> Idle
+            | direction -> CounterClockwise direction
+
+    member this.Right
+        with get() =
+            match this.Resolve with
+            | North -> East
+            | East -> South
+            | South -> West
+            | West -> North
+            | Idle -> Idle
+            | direction -> Clockwise direction
+
+    member this.Back
+        with get() =
+            match this.Resolve with
+            | North -> South
+            | South -> North
+            | East -> West
+            | West -> East
+            | Idle -> Idle
+            | direction -> Opposite direction
+
+    member this.Resolve
+        with get() =
+            match this with
+            | Clockwise direction -> direction.Right
+            | CounterClockwise direction -> direction.Left
+            | RandomPerpendicular direction -> direction.RNDP
+            | Opposite direction -> direction.Back
+            | _ -> this
 
 type Identifier = FlagName of string
 

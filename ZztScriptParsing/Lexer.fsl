@@ -42,6 +42,7 @@ rule read =
 	| "West" { WEST } 
 	| "Seek" { SEEK }
 	| "Flow" { FLOW }
+	| "Idle" { IDLE }
 	| "CW" { CW }
 	| "CCW" { CCW }
 	| "RNDP" { RNDP }

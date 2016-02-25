@@ -11,7 +11,7 @@ open MusicSyntax
 %token MOVE GO WALK PLAY_MUSIC
 %token IF THEN ELSE UNLESS SET CLEAR
 %token ALIGNED TOUCHING BLOCKED ENERGIZED
-%token NORTH SOUTH EAST WEST SEEK FLOW CW CCW RNDP OPP
+%token NORTH SOUTH EAST WEST SEEK FLOW IDLE CW CCW RNDP OPP
 %token ON DO END
 %token ANNOUNCE
 %token SHOOT
@@ -102,6 +102,7 @@ direction:
 	| WEST { West }
 	| SEEK { Seek }
 	| FLOW { Flow }
+	| IDLE { Idle }
 	| CW direction { Clockwise $2 }
 	| CCW direction { CounterClockwise $2 }
 	| RNDP direction { RandomPerpendicular $2 }

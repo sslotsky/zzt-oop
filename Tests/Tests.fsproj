@@ -71,6 +71,7 @@
     <None Include="app.config" />
     <Compile Include="GameObjectTest.fs" />
     <Compile Include="MusicTest.fs" />
+    <Compile Include="DirectionTest.fs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ZztScriptParsing\ZztScriptParsing.fsproj">
